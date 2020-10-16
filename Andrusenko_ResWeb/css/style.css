@@ -1,0 +1,16 @@
+.gallery{
+    margin: 10px 50px;
+    width: 100%;
+}
+
+.gallery img{
+    transition: 1s;
+    padding: 15px;
+    width: 640px;
+    height: 426px;
+}
+
+.gallery img:hover {
+    filter: grayscale(100%);
+    transform: scale(1.05);
+}
