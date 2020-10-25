@@ -23,7 +23,6 @@ body {
 }
 
 .parent {
-    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -163,7 +162,6 @@ ul li a:hover {
 /*-----------------------------------*/
 
 footer {
-    position: fixed;
     left: 0;
     bottom: 0;
     height: 80px;
@@ -172,10 +170,18 @@ footer {
     text-align: center;
     display: inline-block;
     line-height: 80px;
+    margin-top: -50px;
+}
+
+.content {
+    min-height: 100vh;
 }
 
 
 @media only screen and (min-width: 762px) {
+    .content {
+        min-height: calc(100vh - 195px);
+    }
 
     .gallery-links-h2 {
         font-size: 28px;
