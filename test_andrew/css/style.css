@@ -1,0 +1,138 @@
+body {
+  height: 100vh;
+  background: radial-gradient(circle, #4aaff4 32%, #4a4ef4 100%);
+}
+
+.link, .link-2 {
+  border-bottom: 5px dashed red;
+}
+
+.link:hover, .link-2:hover {
+  color: green;
+}
+
+.nav-header-main {
+  width: 100%;
+  margin: auto;
+  padding-top: 1rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.wrapper-main {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  width: 100%;
+  height: 100%;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding-top: 14rem;
+}
+
+.form-signup {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  max-width: 24rem;
+}
+
+.login-status {
+  color: #fff;
+}
+
+.text-white {
+  color: #fff;
+}
+
+.password-status {
+  font-size: 10px;
+}
+
+.password-status .created {
+  color: red;
+}
+
+.password-status .expired {
+  color: green;
+}
+
+.block {
+  width: 31.25%;
+  background-color: #666;
+  padding: 30px;
+  line-height: 60px;
+}
+
+.block.block--big {
+  font-size: 100px;
+}
+
+.block__text {
+  font-size: 20px;
+}
+
+.block__text span {
+  color: green;
+}
+
+.link {
+  font-size: 50px;
+  color: green;
+}
+
+.link-2 {
+  font-size: 50px;
+  color: green;
+}
+
+.mr-4 {
+  margin-right: 4rem;
+}
+
+.mr-2 {
+  margin-right: 2rem;
+}
+
+.mb-1 {
+  margin-bottom: 1rem;
+}
+
+.ml-2 {
+  margin-left: 2rem;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.rounded {
+  border-radius: 0.25rem;
+  border-width: 1px;
+  border-color: grey;
+  font-size: 1rem;
+}
+
+.flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  max-width: 24rem;
+}

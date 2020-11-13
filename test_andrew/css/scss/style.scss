@@ -1,0 +1,137 @@
+// Файл обнулсяющих стилей
+@import "nullstyle.scss";
+
+$fz: 20px;
+$color_1: red;
+$color_2: green;
+
+body {
+  height: 100vh;
+  //background: rgb(74, 78, 244);
+  background: radial-gradient(circle, rgba(74, 175, 244, 1) 32%, rgb(74, 78, 244) 100%);
+}
+
+%tplborder {
+  border-bottom: 5px dashed red;
+
+  &:hover {
+    color: $color_2;
+  }
+}
+
+@mixin fontz($f, $c) {
+  font-size: $f;
+  color: $c;
+}
+
+.nav-header-main {
+  width: 100%;
+  margin: auto;
+  padding-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-login {
+}
+
+.wrapper-main {
+  //flex flex-wrap w-full justify-center items-center pt-56
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  padding-top: 14rem;
+}
+
+.form-signup {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 24rem;
+}
+
+.section-default {
+}
+
+.login-status {
+  color: #fff;
+}
+
+.text-white {
+  color: #fff;
+}
+
+.password-status {
+  .created {
+    color: $color_1;
+  }
+
+  .expired {
+    color: $color_2;
+  }
+
+  font-size: 10px;
+}
+
+.block {
+  width: 300px / 960px * 100%;
+  background-color: #666;
+  padding: 30px;
+  line-height: 60px;
+
+  &.block--big {
+    font-size: 100px;
+  }
+
+  &__text {
+    font-size: $fz;
+
+    span {
+      color: $color_2;
+    }
+  }
+}
+
+.link {
+  @include fontz(50px, green);
+  @extend %tplborder;
+}
+.link-2 {
+  @include fontz(50px, green);
+  @extend %tplborder;
+}
+
+.mr-4 {
+  margin-right: 4rem;
+}
+.mr-2 {
+  margin-right: 2rem;
+}
+
+.mb-1 {
+  margin-bottom: 1rem;
+}
+
+.ml-2 {
+  margin-left: 2rem;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.rounded {
+  border-radius: 0.25rem;
+  border-width: 1px;
+  border-color: grey;
+  font-size: 1rem;
+}
+
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 24rem;
+}
