@@ -3,50 +3,10 @@ require 'dbh.inc.php';
 global $conn;
 global $cartItems;
 
-$sql = "SELECT * FROM " . ITEMS_TABLE;
-$stmt = mysqli_stmt_init($conn);
+$catalog = fetchItemsCatalog($conn);
+$numOfRows = fetchCart($conn);
 
-if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("Location: ../index.php?error=sqlerror");
-    exit();
-}
-
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-
-while ($row = mysqli_fetch_assoc($result)) {
-    $catalog[] = $row;
-}
-
-mysqli_free_result($result);
-mysqli_stmt_close($stmt);
-
-
-$sql = "SELECT c.item_id, i.name, i.img, c.price, c.quantity, c.user_id FROM ".ITEMS_TABLE." i JOIN ".CART_TABLE_MM." c ON i.id = c.item_id where user_id = ?";
-$stmt = mysqli_stmt_init($conn);
-
-if (!mysqli_stmt_prepare($stmt, $sql)) {
-    header("Location: ../index.php?error=sqlerror");
-    exit();
-}
-
-mysqli_stmt_bind_param($stmt, "i", $_SESSION['userId']);
-
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-$numOfRows = 0;
-while ($row = mysqli_fetch_assoc($result)) {
-    $cartItems[] = $row;
-    $numOfRows++;
-    $_SESSION["cart"][strval($row['item_id'])]["quantity"] = $row['quantity'];
-}
-
-mysqli_free_result($result);
-mysqli_stmt_close($stmt);
-
-
-function getBy($att, $value, $array)
-{
+function getBy($att, $value, $array) {
     foreach ($array as $key => $val) {
         if ($val[$att] == $value) {
             return $key;
@@ -137,8 +97,7 @@ function addToCart($productId)
     mysqli_close($conn);
 }
 
-function removeFromCart($productId)
-{
+function removeFromCart($productId) {
     session_start();
     global $conn;
     if (array_key_exists($productId, $_SESSION["cart"])) {
@@ -168,8 +127,7 @@ function removeFromCart($productId)
     }
 }
 
-function deleteFromCart($productId)
-{
+function deleteFromCart($productId) {
     session_start();
     global $conn;
     unset($_SESSION["cart"][$productId]);
@@ -186,11 +144,11 @@ function deleteFromCart($productId)
     mysqli_stmt_close($stmt);
 }
 
-function purchaseCart(){
+function purchaseCart() {
     session_start();
     global $conn;
 
-    $sql = "SELECT c.item_id, i.name, i.img, c.price, c.quantity, c.user_id FROM ".ITEMS_TABLE." i JOIN ".CART_TABLE_MM." c ON i.id = c.item_id where user_id = ?";
+    $sql = "SELECT c.item_id, i.name, i.img, c.price, c.quantity, c.user_id FROM " . ITEMS_TABLE . " i JOIN " . CART_TABLE_MM . " c ON i.id = c.item_id where user_id = ?";
     $stmt = mysqli_stmt_init($conn);
 
     if (!mysqli_stmt_prepare($stmt, $sql)) {
@@ -210,33 +168,83 @@ function purchaseCart(){
     mysqli_stmt_close($stmt);
 
     foreach ($cartItems as $item) {
-        $sql = "INSERT INTO " . ORDER_TABLE_MM . "(total_price, item_id, user_id, quantity) VALUES(?, ?, ?, ?)";
-        $stmt = mysqli_stmt_init($conn);
-
-        if (!mysqli_stmt_prepare($stmt, $sql)) {
-            header("Location: ../index.php?error=sqlerror1");
-            exit();
-        }
-
-        $totalPrice = $item['price'] * $item['quantity'];
-        $strTotal = strval($totalPrice);
-        mysqli_stmt_bind_param(
-            $stmt,
-            "siii",
-            $strTotal,
-            $item['item_id'],
-            $_SESSION['userId'],
-            $item['quantity']);
-
-        if (mysqli_stmt_execute($stmt) == false) {
-            header("Location: ../index.php?error=sqlExecuteErr");
-            exit();
-        }
-
-        deleteFromCart($item['item_id']);
+        moveToOrdersAndDelete($conn, $item);
     }
 
     mysqli_stmt_close($stmt);
     mysqli_close($conn);
+}
+
+function moveToOrdersAndDelete($conn, $item) {
+    $sql = "INSERT INTO " . ORDER_TABLE_MM . "(total_price, item_id, user_id, quantity) VALUES(?, ?, ?, ?)";
+    $stmt = mysqli_stmt_init($conn);
+
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        header("Location: ../index.php?error=sqlerror1");
+        exit();
+    }
+
+    $totalPrice = $item['price'] * $item['quantity'];
+    $strTotal = strval($totalPrice);
+    mysqli_stmt_bind_param(
+        $stmt,
+        "siii",
+        $strTotal,
+        $item['item_id'],
+        $_SESSION['userId'],
+        $item['quantity']);
+
+    if (mysqli_stmt_execute($stmt) == false) {
+        header("Location: ../index.php?error=sqlExecuteErr");
+        exit();
+    }
+
+    deleteFromCart($item['item_id']);
+}
+
+function fetchItemsCatalog($conn) {
+    $sql = "SELECT * FROM " . ITEMS_TABLE;
+    $stmt = mysqli_stmt_init($conn);
+
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        header("Location: ../index.php?error=sqlerror");
+        exit();
+    }
+
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    while ($row = mysqli_fetch_assoc($result)) {
+        $catalog[] = $row;
+    }
+
+    mysqli_free_result($result);
+    mysqli_stmt_close($stmt);
+    return $catalog;
+}
+
+function fetchCart($conn) {
+    $sql = "SELECT c.item_id, i.name, i.img, c.price, c.quantity, c.user_id FROM " . ITEMS_TABLE . " i JOIN " . CART_TABLE_MM . " c ON i.id = c.item_id where user_id = ?";
+    $stmt = mysqli_stmt_init($conn);
+
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        header("Location: ../index.php?error=sqlerror");
+        exit();
+    }
+
+    mysqli_stmt_bind_param($stmt, "i", $_SESSION['userId']);
+
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $numOfRows = 0;
+    while ($row = mysqli_fetch_assoc($result)) {
+        $cartItems[] = $row;
+        $numOfRows++;
+        $_SESSION["cart"][strval($row['item_id'])]["quantity"] = $row['quantity'];
+    }
+
+    mysqli_free_result($result);
+    mysqli_stmt_close($stmt);
+    return $numOfRows;
 }
 
